@@ -1,0 +1,29 @@
+library(leaflet) 
+
+# Data frame de casos activos por cantón, con fechas en las columnas
+# Lectura de la capa de cantones de un archivo GeoJSON
+sf_municipios <-
+  st_read(
+    "https://raw.githubusercontent.com/MetziLuna/Datos_SV/main/municipios.geojson", 
+    quiet = T
+  )
+
+pal_fun <- colorQuantile("YlOrRd", NULL, n = 5)
+
+p_popup <- paste0("<strong>Densidad: </strong>", sf_municipios$densidad)
+
+leaflet(sf_municipios) %>%
+  addPolygons(
+    stroke = FALSE, # remove polygon borders
+    fillColor = ~pal_fun(densidad), # set fill color with function from above and value
+    fillOpacity = 0.8, smoothFactor = 0.5, # make it nicer
+    popup = p_popup,
+    group = "municipios") %>%
+  addTiles(group = "OSM") %>%
+  addProviderTiles("CartoDB.DarkMatter", group = "Carto") %>%
+  addLegend("bottomright",  # location
+            pal=pal_fun,    # palette function
+            values=~densidad,  # value to be passed to palette function
+            title = 'Densidad poblacional 2007')%>%
+  addLayersControl(baseGroups = c("OSM", "Carto"), 
+                   overlayGroups = c("municipios"))  
