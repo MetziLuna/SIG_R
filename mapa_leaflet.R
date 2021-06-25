@@ -1,5 +1,5 @@
 # Copyright (C) Metzi Aguilar
-# This file is part of dogtag <https://github.com/MetziLuna/SIG_R/>.
+# This file is part of SIG_R <https://github.com/MetziLuna/SIG_R/>.
 #
 # SIG_R is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -12,12 +12,12 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with dogtag.  If not, see <http://www.gnu.org/licenses/>.
+# along with SIG_R.  If not, see <http://www.gnu.org/licenses/>.
 
 library(leaflet) 
 
-# Data frame de casos activos por cantón, con fechas en las columnas
-# Lectura de la capa de cantones de un archivo GeoJSON
+# Data frame de municipios
+# Lectura de la capa de municipios de El Salvador desde un archivo GeoJSON
 sf_municipios <-
   st_read(
     "https://raw.githubusercontent.com/MetziLuna/Datos_SV/main/municipios.geojson", 
@@ -32,7 +32,7 @@ leaflet(sf_municipios) %>%
   addPolygons(
     stroke = FALSE, # remove polygon borders
     fillColor = ~pal_fun(densidad), # set fill color with function from above and value
-    fillOpacity = 0.8, smoothFactor = 0.5, # make it nicer
+    fillOpacity = 0.8, smoothFactor = 0.5, # transparencia y suavización
     popup = p_popup,
     group = "municipios") %>%
   addTiles(group = "OSM") %>%
